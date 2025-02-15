@@ -23,7 +23,7 @@ fn main() {
             print(&z,n_points,i, &mut file);
         //}
 
-        z = rk4(&z,&gamma,n_steps,dt,epsilon);
+        z = rk4(&z,&gamma,n_points,dt,epsilon);
         
     }
 
@@ -84,9 +84,8 @@ fn rk4(z: &[Complex<f64>], gamma: &[f64], n: usize, h: f64, epsilon: f64) -> Vec
 
 fn f_z(z: &[Complex<f64>], gamma: &[f64], n: usize, epsilon: f64) -> Vec<Complex<f64>>
 {
-
     let mut answer: Vec<Complex<f64>> = Vec::new();
-    answer.reserve_exact(n);
+    answer.resize(n, Complex::new(0.0,0.0));
 
     for i in 0..n
     {
@@ -97,8 +96,7 @@ fn f_z(z: &[Complex<f64>], gamma: &[f64], n: usize, epsilon: f64) -> Vec<Complex
                 continue;
             }
             
-            let dz = z[i] -
-             z[j];
+            let dz = z[i] - z[j];
 
             let temp_real = (-2.0 * PI * dz.im).sinh();
             let temp_im = (2.0 * PI * dz.re).sin();
